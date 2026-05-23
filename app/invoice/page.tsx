@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 
 type Service = {
   serviceName: string;
@@ -26,6 +27,9 @@ type Invoice = {
 };
 
 export default function InvoicePage() {
+  const { t, language } = useLanguage();
+
+  // All state variables (same as before)
   const [invoiceNumber, setInvoiceNumber] = useState("INV-2026-001");
   const [invoiceDate, setInvoiceDate] = useState(new Date().toISOString().split("T")[0]);
   const [dueDate, setDueDate] = useState(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]);
@@ -48,6 +52,7 @@ export default function InvoicePage() {
   const [selectedInvoiceId, setSelectedInvoiceId] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
 
+  // Load and persist invoices (unchanged)
   useEffect(() => {
     const stored = localStorage.getItem("aafaq_invoices");
     if (stored) {
@@ -66,10 +71,7 @@ export default function InvoicePage() {
 
   const addService = () => {
     if (!serviceName || !rate) return;
-    setServices([
-      ...services,
-      { serviceName, serviceDescription, quantity, unit, rate },
-    ]);
+    setServices([...services, { serviceName, serviceDescription, quantity, unit, rate }]);
     setServiceName("");
     setServiceDescription("");
     setQuantity(1);
@@ -214,8 +216,19 @@ export default function InvoicePage() {
   const vat = applyVat ? subtotal * 0.05 : 0;
   const total = subtotal + vat;
 
+  // Helper to format bilingual label (English / Arabic)
+  const bil = (enKey: string, arKey?: string) => {
+    const enText = t(enKey);
+    const arText = arKey ? t(arKey) : (language === "AR" ? t(enKey) : "");
+    if (language === "AR" && arText && arText !== enKey) {
+      return `${arText} / ${enText}`;
+    }
+    return enText;
+  };
+
   return (
     <div className="bg-gray-100 min-h-screen p-4 print:bg-white print:p-0">
+      {/* Form area (unchanged) */}
       <div className="max-w-7xl mx-auto grid lg:grid-cols-3 gap-6 print:hidden">
         <div className="bg-white rounded-xl shadow p-5 h-fit">
           <h2 className="text-2xl font-bold mb-4">Saved Invoices</h2>
@@ -257,9 +270,7 @@ export default function InvoicePage() {
             <input className="border p-2 rounded" placeholder="Client Email" value={clientEmail} onChange={(e) => setClientEmail(e.target.value)} />
             <textarea className="border p-2 rounded col-span-2" placeholder="Client Address" value={clientAddress} onChange={(e) => setClientAddress(e.target.value)} />
             <select className="border p-2 rounded" value={paymentStatus} onChange={(e) => setPaymentStatus(e.target.value)}>
-              <option>Pending</option>
-              <option>Paid</option>
-              <option>Partial</option>
+              <option>Pending</option><option>Paid</option><option>Partial</option>
             </select>
             <input className="border p-2 rounded" placeholder="Payment Terms" value={paymentTerms} onChange={(e) => setPaymentTerms(e.target.value)} />
             <div className="col-span-2 flex items-center gap-3 mt-2">
@@ -275,32 +286,23 @@ export default function InvoicePage() {
             <input className="border p-2 rounded" placeholder="Unit" value={unit} onChange={(e) => setUnit(e.target.value)} />
             <input type="number" className="border p-2 rounded col-span-2" placeholder="Rate (AED)" value={rate} onChange={(e) => setRate(Number(e.target.value))} />
           </div>
-          <button onClick={addService} className="bg-green-600 text-white px-4 py-2 rounded mt-3">
-            Add Service
-          </button>
+          <button onClick={addService} className="bg-green-600 text-white px-4 py-2 rounded mt-3">Add Service</button>
 
           <div className="mt-5 flex gap-3">
             {isEditing ? (
-              <button onClick={updateInvoice} className="bg-yellow-600 text-white px-4 py-2 rounded">
-                Update Invoice
-              </button>
+              <button onClick={updateInvoice} className="bg-yellow-600 text-white px-4 py-2 rounded">Update Invoice</button>
             ) : (
-              <button onClick={saveNewInvoice} className="bg-blue-600 text-white px-4 py-2 rounded">
-                Save Invoice
-              </button>
+              <button onClick={saveNewInvoice} className="bg-blue-600 text-white px-4 py-2 rounded">Save Invoice</button>
             )}
-            <button onClick={() => window.print()} className="bg-black text-white px-4 py-2 rounded">
-              Print Invoice
-            </button>
-            <button onClick={downloadPDF} className="bg-red-600 text-white px-4 py-2 rounded">
-              Download PDF
-            </button>
+            <button onClick={() => window.print()} className="bg-black text-white px-4 py-2 rounded">Print Invoice</button>
+            <button onClick={downloadPDF} className="bg-red-600 text-white px-4 py-2 rounded">Download PDF</button>
           </div>
         </div>
       </div>
 
-      {/* PRINTABLE INVOICE AREA */}
+      {/* PRINTABLE INVOICE AREA – BILINGUAL (EN/AR) */}
       <div id="print-area" className="bg-white max-w-[210mm] min-h-[297mm] mx-auto mt-8 p-8 text-black print:p-5 shadow-lg">
+        {/* HEADER */}
         <div className="invoice-header flex justify-between items-start border-b pb-4">
           <div className="flex gap-3">
             <img src="/icon.png" alt="Logo" className="w-16 h-16 object-contain" />
@@ -314,40 +316,45 @@ export default function InvoicePage() {
             </div>
           </div>
           <div className="text-right">
-            <h2 className="text-3xl font-bold">INVOICE</h2>
+            <h2 className="text-3xl font-bold">{bil("invoice.title")}</h2>
             <div className="text-sm mt-3 space-y-1">
-              <p><strong>No:</strong> {invoiceNumber}</p>
-              <p><strong>Date:</strong> {invoiceDate}</p>
-              <p><strong>Due:</strong> {dueDate}</p>
-              <p><strong>Ref:</strong> {reference}</p>
+              <p><strong>{bil("invoice.number")}:</strong> {invoiceNumber}</p>
+              <p><strong>{bil("invoice.date")}:</strong> {invoiceDate}</p>
+              <p><strong>{bil("invoice.due")}:</strong> {dueDate}</p>
+              <p><strong>{bil("invoice.ref")}:</strong> {reference}</p>
             </div>
           </div>
         </div>
 
+        {/* CLIENT & STATUS */}
         <div className="invoice-client mt-5 grid grid-cols-2 gap-5 text-sm">
           <div>
-            <h3 className="font-bold mb-2">Bill To</h3>
+            <h3 className="font-bold mb-2">{bil("invoice.billTo")}</h3>
             <p>{clientName}</p>
             <p>{clientAddress}</p>
             <p>{clientEmail}</p>
           </div>
           <div className="text-right">
-            <p><strong>Status:</strong> {paymentStatus}</p>
-            <p><strong>Terms:</strong> {paymentTerms}</p>
-            <p><strong>VAT:</strong> {applyVat ? "Applicable (5%)" : "Not Applicable"}</p>
+            <p><strong>{bil("invoice.status")}:</strong> {paymentStatus}</p>
+            <p><strong>{bil("invoice.terms")}:</strong> {paymentTerms}</p>
+            <p>
+              <strong>{bil("invoice.vatLabel")}:</strong>{" "}
+              {applyVat ? bil("invoice.applicable") : bil("invoice.notApplicable")}
+            </p>
           </div>
         </div>
 
+        {/* TABLE */}
         <div className="invoice-table mt-6 overflow-hidden">
           <table className="w-full border-collapse text-sm">
             <thead>
               <tr className="bg-gray-100">
-                <th className="border p-2">#</th>
-                <th className="border p-2 text-left">Description</th>
-                <th className="border p-2">Qty</th>
-                <th className="border p-2">Unit</th>
-                <th className="border p-2">Rate</th>
-                <th className="border p-2">Amount</th>
+                <th className="border p-2">{bil("invoice.tableHeader.hash")}</th>
+                <th className="border p-2 text-left">{bil("invoice.tableHeader.description")}</th>
+                <th className="border p-2">{bil("invoice.tableHeader.qty")}</th>
+                <th className="border p-2">{bil("invoice.tableHeader.unit")}</th>
+                <th className="border p-2">{bil("invoice.tableHeader.rate")}</th>
+                <th className="border p-2">{bil("invoice.tableHeader.amount")}</th>
                 <th className="border p-2 print:hidden">Action</th>
               </tr>
             </thead>
@@ -372,28 +379,30 @@ export default function InvoicePage() {
           </table>
         </div>
 
+        {/* TOTALS */}
         <div className="mt-6 flex justify-end invoice-total-box">
           <div className="w-72 space-y-2 text-sm">
             <div className="flex justify-between border-b pb-1">
-              <span>Subtotal</span>
+              <span>{bil("invoice.subtotal")}</span>
               <span>AED {subtotal.toLocaleString()}</span>
             </div>
             {applyVat && (
               <div className="flex justify-between border-b pb-1">
-                <span>VAT 5%</span>
+                <span>{bil("invoice.vatLabel")} 5%</span>
                 <span>AED {vat.toLocaleString()}</span>
               </div>
             )}
             <div className="flex justify-between text-lg font-bold border rounded-lg p-3">
-              <span>Total</span>
+              <span>{bil("invoice.total")}</span>
               <span>AED {total.toLocaleString()}</span>
             </div>
           </div>
         </div>
 
+        {/* NOTES */}
         <div className="invoice-notes mt-8 text-xs text-gray-700">
-          <p>Thank you for choosing AAFAQ ALMASAR PROJECT MANAGEMENT SERVICES L.L.C.</p>
-          <p className="mt-2">Payment is due according to agreed contractual terms.</p>
+          <p>{bil("invoice.notes")}</p>
+          <p className="mt-2">{bil("invoice.paymentNote")}</p>
         </div>
       </div>
     </div>

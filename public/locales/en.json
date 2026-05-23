@@ -299,4 +299,29 @@
     "section6Title": "Modifications",
     "section6Text": "AAFAQ ALMASAR PROJECT MANAGEMENT SERVICES L.L.C reserves the right to modify these terms and website content at any time without prior notice."
   }
+,"invoice": {
+  "title": "INVOICE",
+  "number": "Invoice No",
+  "date": "Invoice Date",
+  "due": "Due Date",
+  "ref": "Reference",
+  "billTo": "Bill To",
+  "status": "Status",
+  "terms": "Payment Terms",
+  "vatLabel": "VAT",
+  "applicable": "Applicable",
+  "notApplicable": "Not Applicable",
+  "subtotal": "Subtotal",
+  "total": "Total",
+  "tableHeader": {
+    "hash": "#",
+    "description": "Description",
+    "qty": "Qty",
+    "unit": "Unit",
+    "rate": "Rate",
+    "amount": "Amount"
+  },
+  "notes": "Thank you for choosing AAFAQ ALMASAR PROJECT MANAGEMENT SERVICES L.L.C.",
+  "paymentNote": "Payment is due according to agreed contractual terms."
+}
 }
