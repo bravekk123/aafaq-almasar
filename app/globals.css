@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+body {
+  overflow-x: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f3f4f6;
+  color: #111827;
+
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* =========================
+   PRINT SETTINGS
+========================= */
+
+@media print {
+
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+
+  html,
+  body {
+    background: white !important;
+    overflow: visible !important;
+
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  nav,
+  header,
+  footer,
+  aside,
+  .print\:hidden,
+  .no-print {
+    display: none !important;
+  }
+
+  #print-area {
+
+    width: 190mm !important;
+
+    min-height: auto !important;
+
+    margin: 0 auto !important;
+
+    padding: 0 !important;
+
+    border: none !important;
+
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+
+    background: white !important;
+
+    overflow: visible !important;
+  }
+
+  table {
+
+    width: 100% !important;
+
+    border-collapse: collapse !important;
+
+    page-break-inside: auto !important;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tfoot {
+    display: table-footer-group;
+  }
+
+  tr {
+
+    page-break-inside: avoid !important;
+
+    page-break-after: auto !important;
+  }
+
+  td,
+  th {
+
+    padding: 5px !important;
+
+    vertical-align: top !important;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  div,
+  section {
+
+    page-break-inside: avoid;
+  }
+
+  .invoice-header {
+    page-break-after: avoid !important;
+  }
+
+  .invoice-client {
+    page-break-after: avoid !important;
+  }
+
+  .invoice-table {
+    page-break-before: auto !important;
+  }
+
+  .invoice-notes {
+    page-break-inside: avoid !important;
+  }
+
+  .invoice-total-box {
+    page-break-inside: avoid !important;
+  }
+
+  img {
+
+    max-width: 100% !important;
+
+    page-break-inside: avoid;
+  }
+
+  a[href]:after {
+    content: none !important;
+  }
+
+  * {
+
+    box-shadow: none !important;
+
+    text-shadow: none !important;
+  }
+}
