@@ -28,6 +28,7 @@ export async function generatePDF(component: React.ReactElement, filename: strin
     // 2. Convert the element to a PNG image
     const dataUrl = await domtoimage.toPng(element, {
       quality: 1,
+      // @ts-ignore - useCORS is a valid option despite TypeScript error
       useCORS: true,
       scale: 2, // high resolution
     });
