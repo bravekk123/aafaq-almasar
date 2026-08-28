@@ -1,0 +1,240 @@
+@import "tailwindcss";
+
+/* Base variables – Light mode */
+:root {
+  --bg-body: #f3f4f6;
+  --text-body: #111827;
+}
+
+/* Dark mode */
+.dark {
+  --bg-body: #0f172a;
+  --text-body: #f1f5f9;
+}
+
+/* Pro mode – crisp, professional, high contrast */
+.pro {
+  --bg-body: #f8f6f2;
+  --text-body: #1e2a1f;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-body);
+  color: var(--text-body);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Mobile touch targets – all interactive elements have minimum tap size */
+button,
+a,
+[role="button"],
+input,
+select,
+textarea {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Focus outline for accessibility */
+*:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+/* =========================
+   LIGHT MODE OVERRIDES
+========================= */
+:root:not(.dark):not(.pro) .bg-black,
+:root:not(.dark):not(.pro) .bg-slate-900,
+:root:not(.dark):not(.pro) .bg-gray-900,
+:root:not(.dark):not(.pro) .bg-gradient-to-b.from-black,
+:root:not(.dark):not(.pro) .bg-gradient-to-b.from-slate-900 {
+  background-color: #f9fafb !important;
+  background-image: none !important;
+}
+:root:not(.dark):not(.pro) .text-white,
+:root:not(.dark):not(.pro) .text-gray-300 {
+  color: #111827 !important;
+}
+:root:not(.dark):not(.pro) .border-gray-800 {
+  border-color: #e5e7eb !important;
+}
+:root:not(.dark):not(.pro) .bg-gray-800 {
+  background-color: #ffffff !important;
+}
+:root:not(.dark):not(.pro) .bg-gray-100 {
+  background-color: #f3f4f6 !important;
+}
+:root:not(.dark):not(.pro) .bg-white {
+  background-color: #ffffff !important;
+}
+
+/* =========================
+   DARK MODE OVERRIDES
+========================= */
+.dark .bg-white {
+  background-color: #1e293b !important;
+}
+.dark .bg-gray-100 {
+  background-color: #1e293b !important;
+}
+.dark .bg-black {
+  background-color: #0f172a !important;
+}
+.dark .text-black {
+  color: #f1f5f9 !important;
+}
+.dark .text-gray-600,
+.dark .text-gray-700 {
+  color: #cbd5e1 !important;
+}
+.dark .border-gray-300,
+.dark .border-gray-200 {
+  border-color: #334155 !important;
+}
+.dark .bg-gray-800 {
+  background-color: #0f172a !important;
+}
+.dark .bg-gray-900 {
+  background-color: #020617 !important;
+}
+
+/* =========================
+   PRO MODE OVERRIDES – crisp, clean, professional
+========================= */
+.pro .bg-white {
+  background-color: #ffffff !important;
+  border: 1px solid #e2dcd0 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03) !important;
+}
+.pro .bg-gray-100 {
+  background-color: #f5f2ed !important;
+  border: 1px solid #e0d9cd !important;
+}
+.pro .bg-black,
+.pro .bg-gray-900,
+.pro .bg-slate-900,
+.pro .bg-gradient-to-b.from-black,
+.pro .bg-gradient-to-b.from-slate-900 {
+  background-color: #e8e2d6 !important;
+  background-image: none !important;
+}
+.pro .text-white,
+.pro .text-gray-200,
+.pro .text-gray-300 {
+  color: #1e2a1f !important;
+}
+.pro .text-black {
+  color: #1e2a1f !important;
+}
+.pro .text-gray-600,
+.pro .text-gray-700 {
+  color: #3b4a3d !important;
+}
+.pro .border-gray-300,
+.pro .border-gray-200 {
+  border-color: #d6cfc2 !important;
+}
+.pro .bg-green-600 {
+  background-color: #6a7c68 !important;
+}
+.pro .bg-blue-600 {
+  background-color: #6f7d6e !important;
+}
+.pro .bg-green-600:hover {
+  background-color: #556654 !important;
+}
+.pro .bg-blue-600:hover {
+  background-color: #5c6b5b !important;
+}
+.pro footer {
+  background-color: #e8e2d6 !important;
+  border-top-color: #c9c1b2 !important;
+}
+.pro footer .text-gray-300,
+.pro footer .text-gray-400 {
+  color: #3b4a3d !important;
+}
+
+/* =========================
+   PRINT SETTINGS
+========================= */
+@media print {
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+  html, body {
+    background: white !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  nav, header, footer, aside, .print\:hidden, .no-print {
+    display: none !important;
+  }
+  #print-area {
+    width: 190mm !important;
+    min-height: auto !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: white !important;
+    overflow: visible !important;
+  }
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    page-break-inside: auto !important;
+  }
+  thead { display: table-header-group; }
+  tfoot { display: table-footer-group; }
+  tr { page-break-inside: avoid !important; page-break-after: auto !important; }
+  td, th { padding: 5px !important; vertical-align: top !important; }
+  h1, h2, h3, h4, p, div, section { page-break-inside: avoid; }
+  .invoice-header { page-break-after: avoid !important; }
+  .invoice-client { page-break-after: avoid !important; }
+  .invoice-table { page-break-before: auto !important; }
+  .invoice-notes { page-break-inside: avoid !important; }
+  .invoice-total-box { page-break-inside: avoid !important; }
+  img { max-width: 100% !important; page-break-inside: avoid; }
+  a[href]:after { content: none !important; }
+  * { box-shadow: none !important; text-shadow: none !important; }
+}
+
+/* =========================
+   CONTACT POPUP SCROLLBAR FIX (Desktop + Mobile)
+   Removes any internal scrollbar, makes all options fully visible
+========================= */
+.contact-popup,
+div[class*="contact-popup"],
+.absolute[style*="width: 320px"],
+.absolute[style*="width: 280px"] {
+  overflow: visible !important;
+  max-height: none !important;
+  height: auto !important;
+}
+
+.contact-popup .space-y-2,
+div[class*="contact-popup"] .space-y-2 {
+  overflow: visible !important;
+  max-height: none !important;
+}
+
+/* Ensure the popup content expands fully */
+.contact-popup a,
+div[class*="contact-popup"] a {
+  white-space: nowrap;
+}
