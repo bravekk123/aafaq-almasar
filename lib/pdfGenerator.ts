@@ -25,12 +25,14 @@ export async function generatePDF(component: React.ReactElement, filename: strin
   const element = container.firstChild as HTMLElement;
 
   try {
-    // 2. Convert the element to a PNG image
-    const dataUrl = await domtoimage.toPng(element, {
-      quality: 1,
+    // 2. Convert the element to a JPEG image (much smaller than PNG)
+    //    - scale: 1.5 provides sharp text while keeping file size down
+    //    - quality: 0.85 is a good balance (0.8–0.9 works well)
+    const dataUrl = await domtoimage.toJpeg(element, {
+      quality: 0.85,
       // @ts-ignore - useCORS is a valid option despite TypeScript error
       useCORS: true,
-      scale: 2, // high resolution
+      scale: 1.5, // reduced from 2.0
     });
 
     // 3. Create a PDF and add the image
@@ -42,7 +44,7 @@ export async function generatePDF(component: React.ReactElement, filename: strin
 
     const imgWidth = 210; // A4 width in mm
     const imgHeight = (element.offsetHeight / element.offsetWidth) * imgWidth;
-    pdf.addImage(dataUrl, "PNG", 0, 0, imgWidth, imgHeight);
+    pdf.addImage(dataUrl, "JPEG", 0, 0, imgWidth, imgHeight);
     pdf.save(filename);
   } catch (error) {
     console.error("PDF generation failed:", error);
